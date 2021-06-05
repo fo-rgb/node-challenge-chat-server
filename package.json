@@ -24,5 +24,6 @@
   "bugs": {
     "url": "https://github.com/fo-rgb/node-challenge-chat-server/issues"
   },
-  "homepage": "https://github.com/fo-rgb/node-challenge-chat-server#readme"
+  "homepage": "https://github.com/fo-rgb/node-challenge-chat-server#readme",
+  "devDependencies": {}
 }

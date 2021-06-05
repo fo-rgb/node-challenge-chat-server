@@ -1,7 +1,6 @@
 const { response } = require("express");
 const express = require("express");
 const app = express();
-const fs = require("fs");
 app.use(express.json());
 
 const welcomeMessage = {
@@ -15,15 +14,26 @@ const welcomeMessage = {
 //Note: messages will be lost when Glitch restarts our server.
 const messages = [welcomeMessage];
 
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + "/index.html");
+app.get("/", function (req, response) {
+  response.send(__dirname + "/index.html");
 });
 
-app.get("/messages", function (request, response) {
+app.get("/messages", function (req, response) {
   response.send(messages);
 });
 
-// Post
+app.get("/messages/:id", function (req, res) {
+  let id = parseInt(req.params.id);
+
+  let messageFind = messages.find((i) => i.id === id);
+  if (messageFind) {
+    res.send(messageFind);
+  } else {
+    res.sendStatus(400);
+  }
+});
+
+// // Post
 
 app.post("/messages", function (req, res) {
   let mesagePost = req.body;
@@ -34,17 +44,28 @@ app.post("/messages", function (req, res) {
 });
 
 // put
-app.put("/messages/id", function (req, res) {
+app.put("/messages/:id", function (req, res) {
   let id = parseInt(req.params.id);
   let body = req.body;
-  let messageFind = quotes.find((i) => i.id == id);
+  let messageFind = messages.find((i) => i.id == id);
   messageFind.from = body.from;
   messageFind.text = body.text;
-  messageFind.id = body.id;
 
-  res.status(200).json(messageFind);
+  res.status(400).json(messageFind);
 });
 
-app.listen(3000, () => {
-  console.log("Listening on port 3000");
+app.delete("/messages/:id", function (req, res) {
+  let id = parseInt(req.params.id);
+
+  let messageFinde = messages.findIndex((o) => o.id === id);
+  if (messageFinde !== -1) {
+    messages.splice(messageFinde, 1);
+    res.sendStatus(messageFinde);
+  } else {
+    res.sendStatus(200);
+  }
+});
+
+app.listen(4000, () => {
+  console.log("Listening on port 4000");
 });
